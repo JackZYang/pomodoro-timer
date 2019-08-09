@@ -5,6 +5,7 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
+      isOn: false,
       remainingTime: 1500,
 
     };
@@ -21,10 +22,31 @@ class App extends Component{
     clearInterval(this.intervalID);
   }
 
-  handleCountdown = () => {
+  handleStart = () => {
     this.setState({
-      remainingTime: this.state.remainingTime-1,
+      isOn: true
     });
+  }
+
+  handleReset = () => {
+    this.setState({
+      isOn: false,
+      remainingTime: 1500
+    });
+  }
+  
+  handlePause = () => {
+    this.setState({
+      isOn: false
+    });
+  }
+
+  handleCountdown = () => {
+    if (this.state.isOn) {
+      this.setState({
+        remainingTime: this.state.remainingTime-1,
+      });
+    }
   }
 
   render(){
@@ -32,7 +54,14 @@ class App extends Component{
       <div className="App">
         <h1>Pomodoro Clock:</h1>
         <div>
-          {Math.floor(this.state.remainingTime/60) + ":" + ('0' + this.state.remainingTime%60).slice(-2)}
+          <div className="time-remaning">
+            {Math.floor(this.state.remainingTime/60) + ":" + ('0' + this.state.remainingTime%60).slice(-2)}
+          </div>
+          <div className="buttons">
+            <button onClick={this.handleStart}>Start</button>
+            <button onClick={this.handlePause}>Pause</button>
+            <button onClick={this.handleReset}>Reset</button>
+          </div>
         </div>
       </div>
     );
