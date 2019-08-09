@@ -1,13 +1,16 @@
 import React, {Component} from 'react';
 import './App.css';
+import Timer from './Timer';
 
 class App extends Component{
   constructor(props){
     super(props);
     this.state = {
       isOn: false,
-      remainingTime: 1500,
-
+      breakIsOn: false,
+      defaultRemainingTime: 5,
+      defaultBreakTime: 3,
+      remainingTime: 5
     };
   }
   
@@ -30,21 +33,35 @@ class App extends Component{
 
   handleReset = () => {
     this.setState({
+      remainingTime: this.state.defaultRemainingTime,
       isOn: false,
-      remainingTime: 1500
+      breakIsOn: false,
     });
   }
   
   handlePause = () => {
     this.setState({
-      isOn: false
+      isOn: false,
+      breakIsOn: false
     });
   }
 
   handleCountdown = () => {
-    if (this.state.isOn) {
+    if (this.state.remainingTime>0 && (this.state.isOn || this.state.breakIsOn)) {
       this.setState({
-        remainingTime: this.state.remainingTime-1,
+        remainingTime: this.state.remainingTime - 1,
+      });
+    } else if (this.state.remainingTime===0 && this.state.isOn) {
+      this.setState({
+        isOn: false,
+        breakIsOn: true,
+        remainingTime: this.state.defaultBreakTime - 1,
+      });
+    } else if (this.state.remainingTime===0 && this.state.breakIsOn) {
+      this.setState({
+        isOn: true,
+        breakIsOn: false,
+        remainingTime: this.state.defaultRemainingTime - 1,
       });
     }
   }
@@ -55,7 +72,7 @@ class App extends Component{
         <h1>Pomodoro Clock:</h1>
         <div>
           <div className="time-remaning">
-            {Math.floor(this.state.remainingTime/60) + ":" + ('0' + this.state.remainingTime%60).slice(-2)}
+            <Timer remainingTime={this.state.remainingTime} />
           </div>
           <div className="buttons">
             <button onClick={this.handleStart}>Start</button>
@@ -66,7 +83,6 @@ class App extends Component{
       </div>
     );
   }
-
 }
 
 export default App;
