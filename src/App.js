@@ -8,9 +8,9 @@ class App extends Component{
     this.state = {
       isOn: false,
       breakIsOn: false,
-      defaultRemainingTime: 5,
-      defaultBreakTime: 3,
-      remainingTime: 5
+      defaultRemainingTime: 1500,
+      defaultBreakTime: 300,
+      remainingTime: 1500
     };
   }
   
@@ -69,7 +69,7 @@ class App extends Component{
   render(){
     return(
       <div className="App">
-        <h1>Pomodoro Clock:</h1>
+        <h1>Pomodoro Clock</h1>
         <div>
           <div className="time-remaning">
             <Timer remainingTime={this.state.remainingTime} />
