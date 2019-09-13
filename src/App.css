@@ -2,11 +2,44 @@
   text-align: center;
 }
 
-button {
-  background-color: #3CB371;
+.timer {
+  padding: 8px;
+  font-size: 4em;
+}
+
+button:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.start-buttons button {
+  background-color: #1F99FF;
   color: white;
   border: none;
   margin: 4px;
-  padding: 10px;
+  padding: 9px;
   margin-top: 20px;
+}
+
+.modify-time{
+  margin-top: 20px;
+}
+
+.modify-work, .modify-break {
+  padding: 8px;
+}
+
+.modify-time button {
+  background-color: #61B7FF;
+  color: white;
+  border: none;
+  margin: 4px;
+}
+
+.modify-work button, .modify-break button {
+  width: 2em;
+}
+
+.set-time button {
+  padding: 10px;
 }

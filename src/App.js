@@ -8,9 +8,9 @@ class App extends Component{
     this.state = {
       isOn: false,
       breakIsOn: false,
-      defaultRemainingTime: 1500,
+      defaultWorkTime: 60,
       defaultBreakTime: 300,
-      remainingTime: 1500
+      remainingTime: 60
     };
   }
   
@@ -33,7 +33,7 @@ class App extends Component{
 
   handleReset = () => {
     this.setState({
-      remainingTime: this.state.defaultRemainingTime,
+      remainingTime: this.state.defaultWorkTime,
       isOn: false,
       breakIsOn: false,
     });
@@ -61,23 +61,75 @@ class App extends Component{
       this.setState({
         isOn: true,
         breakIsOn: false,
-        remainingTime: this.state.defaultRemainingTime - 1,
+        remainingTime: this.state.defaultWorkTime - 1,
       });
     }
   }
 
+  addWork = () => {
+    this.setState({
+      defaultWorkTime: this.state.defaultWorkTime + 60
+    });
+  }
+
+  minusWork = () => {
+    if (this.state.defaultWorkTime > 60){
+      this.setState({
+        defaultWorkTime: this.state.defaultWorkTime - 60
+      });
+    }
+  }
+
+  addBreak = () => {
+    this.setState({
+      defaultBreakTime: this.state.defaultBreakTime + 60
+    });
+  }
+
+  minusBreak = () => {
+    if (this.state.defaultBreakTime > 60){
+      this.setState({
+        defaultBreakTime: this.state.defaultBreakTime - 60
+      });
+    }
+  }
+
+  handleDefault = () => {
+    this.setState({
+      defaultWorkTime: 1500,
+      defaultBreakTime: 300
+    });
+  }
+
   render(){
-    return(
+    return (
       <div className="App">
         <h1>Pomodoro Clock</h1>
-        <div>
-          <div className="time-remaning">
+        <div className="time-remaning">
             <Timer remainingTime={this.state.remainingTime} />
+            <div className="timer-state">
+              {this.state.isOn ? "Working!" : "Break Time!"}
+            </div>
+        </div>
+        <div className="start-buttons">
+          <button onClick={this.handleStart}>Start</button>
+          <button onClick={this.handlePause}>Pause</button>
+          <button onClick={this.handleReset}>Reset</button>
+        </div>
+        <div className="modify-time">
+          <div className="modify-work">
+            Work: {Math.floor(this.state.defaultWorkTime/60)} minutes
+            <button onClick={this.minusWork}>-</button>
+            <button onClick={this.addWork}>+</button>
           </div>
-          <div className="buttons">
-            <button onClick={this.handleStart}>Start</button>
-            <button onClick={this.handlePause}>Pause</button>
-            <button onClick={this.handleReset}>Reset</button>
+          <div className="modify-break">
+            Break: {Math.floor(this.state.defaultBreakTime/60)} minutes
+            <button onClick={this.minusBreak}>-</button>
+            <button onClick={this.addBreak}>+</button>
+          </div>
+          <div className="set-time">
+            <button onClick={this.handleReset}>Set</button>
+            <button onClick={this.handleDefault}>Default</button>
           </div>
         </div>
       </div>

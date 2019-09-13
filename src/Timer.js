@@ -4,7 +4,7 @@ const Timer = ({remainingTime}) => {
     const minutes = Math.floor(remainingTime/60);
     const seconds = ('0' + remainingTime%60).slice(-2)
     return (
-        <div>
+        <div className="timer">
             {minutes + ":" + seconds}
         </div>        
     );
