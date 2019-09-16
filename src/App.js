@@ -9,9 +9,11 @@ class App extends Component{
       working: false,
       onBreak: false,
       pause: true,
-      defaultWorkTime: 1500,
-      defaultBreakTime: 300,
-      remainingTime: 1500
+      currentWork: 1500,
+      currentBreak: 300,
+      remainingTime: 1500,
+      setWork: 1500,
+      setBreak: 300
     };
   }
   
@@ -34,10 +36,12 @@ class App extends Component{
 
   reset = () => {
     this.setState({
-      remainingTime: this.state.defaultWorkTime,
+      remainingTime: this.state.setWork,
       working: false,
       onBreak: false,
-      pause: true
+      pause: true,
+      currentWork: this.state.setWork,
+      currentBreak: this.state.setBreak
     });
   }
   
@@ -61,49 +65,49 @@ class App extends Component{
       this.setState({
         working: false,
         onBreak: true,
-        remainingTime: this.state.defaultBreakTime - 1
+        remainingTime: this.state.currentBreak - 1
       });
     } else if (this.state.remainingTime===0 && this.state.onBreak) {
       this.setState({
         working: true,
         onBreak: false,
-        remainingTime: this.state.defaultWorkTime - 1
+        remainingTime: this.state.currentWork - 1
       });
     }
   }
 
   addWork = () => {
     this.setState({
-      defaultWorkTime: this.state.defaultWorkTime + 60
+      setWork: this.state.setWork + 60
     });
   }
 
   minusWork = () => {
-    if (this.state.defaultWorkTime > 60){
+    if (this.state.setWork > 60){
       this.setState({
-        defaultWorkTime: this.state.defaultWorkTime - 60
+        setWork: this.state.setWork - 60
       });
     }
   }
 
   addBreak = () => {
     this.setState({
-      defaultBreakTime: this.state.defaultBreakTime + 60
+      setBreak: this.state.setBreak + 60
     });
   }
 
   minusBreak = () => {
-    if (this.state.defaultBreakTime > 60){
+    if (this.state.setBreak > 60){
       this.setState({
-        defaultBreakTime: this.state.defaultBreakTime - 60
+        setBreak: this.state.setBreak - 60
       });
     }
   }
 
   default = () => {
     this.setState({
-      defaultWorkTime: 1500,
-      defaultBreakTime: 300
+      setWork: 1500,
+      setBreak: 300
     });
   }
 
@@ -124,12 +128,12 @@ class App extends Component{
         </div>
         <div className="modify-time">
           <div className="modify-work">
-            Work: {Math.floor(this.state.defaultWorkTime/60)} minutes
+            Work: {Math.floor(this.state.setWork/60)} minutes
             <button onClick={this.minusWork}>-</button>
             <button onClick={this.addWork}>+</button>
           </div>
           <div className="modify-break">
-            Break: {Math.floor(this.state.defaultBreakTime/60)} minutes
+            Break: {Math.floor(this.state.setBreak/60)} minutes
             <button onClick={this.minusBreak}>-</button>
             <button onClick={this.addBreak}>+</button>
           </div>
