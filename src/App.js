@@ -6,17 +6,18 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
-      isOn: false,
-      breakIsOn: false,
-      defaultWorkTime: 60,
+      working: false,
+      onBreak: false,
+      pause: true,
+      defaultWorkTime: 1500,
       defaultBreakTime: 300,
-      remainingTime: 60
+      remainingTime: 1500
     };
   }
   
   componentDidMount() {
     this.intervalID = setInterval(
-      () => this.handleCountdown(),
+      () => this.countdown(),
       1000
     );
   }
@@ -25,43 +26,48 @@ class App extends Component{
     clearInterval(this.intervalID);
   }
 
-  handleStart = () => {
+  start = () => {
     this.setState({
-      isOn: true
+      pause: false
     });
   }
 
-  handleReset = () => {
+  reset = () => {
     this.setState({
       remainingTime: this.state.defaultWorkTime,
-      isOn: false,
-      breakIsOn: false,
+      working: false,
+      onBreak: false,
+      pause: true
     });
   }
   
-  handlePause = () => {
+  pause = () => {
     this.setState({
-      isOn: false,
-      breakIsOn: false
+      pause: true
     });
   }
 
-  handleCountdown = () => {
-    if (this.state.remainingTime>0 && (this.state.isOn || this.state.breakIsOn)) {
+  countdown = () => {
+    if (!this.state.working && !this.state.onBreak && !this.state.pause) {
       this.setState({
-        remainingTime: this.state.remainingTime - 1,
+        working: true,
       });
-    } else if (this.state.remainingTime===0 && this.state.isOn) {
+    }
+    if (this.state.remainingTime>0 && !this.state.pause) {
       this.setState({
-        isOn: false,
-        breakIsOn: true,
-        remainingTime: this.state.defaultBreakTime - 1,
+        remainingTime: this.state.remainingTime - 1
       });
-    } else if (this.state.remainingTime===0 && this.state.breakIsOn) {
+    } else if (this.state.remainingTime===0 && this.state.working) {
       this.setState({
-        isOn: true,
-        breakIsOn: false,
-        remainingTime: this.state.defaultWorkTime - 1,
+        working: false,
+        onBreak: true,
+        remainingTime: this.state.defaultBreakTime - 1
+      });
+    } else if (this.state.remainingTime===0 && this.state.onBreak) {
+      this.setState({
+        working: true,
+        onBreak: false,
+        remainingTime: this.state.defaultWorkTime - 1
       });
     }
   }
@@ -94,7 +100,7 @@ class App extends Component{
     }
   }
 
-  handleDefault = () => {
+  default = () => {
     this.setState({
       defaultWorkTime: 1500,
       defaultBreakTime: 300
@@ -108,13 +114,13 @@ class App extends Component{
         <div className="time-remaning">
             <Timer remainingTime={this.state.remainingTime} />
             <div className="timer-state">
-              {this.state.isOn ? "Working!" : "Break Time!"}
+              {this.state.working ? "Working!" : this.state.onBreak ? "Break Time!" : "Paused"}
             </div>
         </div>
         <div className="start-buttons">
-          <button onClick={this.handleStart}>Start</button>
-          <button onClick={this.handlePause}>Pause</button>
-          <button onClick={this.handleReset}>Reset</button>
+          <button onClick={this.start}>Start</button>
+          <button onClick={this.pause}>Pause</button>
+          <button onClick={this.reset}>Reset</button>
         </div>
         <div className="modify-time">
           <div className="modify-work">
@@ -128,8 +134,8 @@ class App extends Component{
             <button onClick={this.addBreak}>+</button>
           </div>
           <div className="set-time">
-            <button onClick={this.handleReset}>Set</button>
-            <button onClick={this.handleDefault}>Default</button>
+            <button onClick={this.reset}>Set</button>
+            <button onClick={this.default}>Default</button>
           </div>
         </div>
       </div>
