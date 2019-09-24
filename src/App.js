@@ -76,30 +76,28 @@ class App extends Component{
     }
   }
 
-  addWork = () => {
-    this.setState({
-      setWork: this.state.setWork + 60
-    });
-  }
-
-  minusWork = () => {
-    if (this.state.setWork > 60){
+  minus = (e) => {
+    if (this.state.setWork > 60 && e.target.id === "setWork"){
       this.setState({
-        setWork: this.state.setWork - 60
+        [e.target.id]: this.state.setWork - 60
+      });
+    }
+    if (this.state.setBreak > 60 && e.target.id === "setBreak") {
+      this.setState({
+        [e.target.id]: this.state.setBreak - 60
       });
     }
   }
 
-  addBreak = () => {
-    this.setState({
-      setBreak: this.state.setBreak + 60
-    });
-  }
-
-  minusBreak = () => {
-    if (this.state.setBreak > 60){
+  add = (e) => {
+    if (e.target.id === "setWork") {
       this.setState({
-        setBreak: this.state.setBreak - 60
+        [e.target.id]: this.state.setWork + 60
+      });
+    }
+    if (e.target.id === "setBreak") {
+      this.setState({
+        [e.target.id]: this.state.setBreak + 60
       });
     }
   }
@@ -129,13 +127,13 @@ class App extends Component{
         <div className="modify-time">
           <div className="modify-work">
             Work: {Math.floor(this.state.setWork/60)} minutes
-            <button onClick={this.minusWork}>-</button>
-            <button onClick={this.addWork}>+</button>
+            <button onClick={this.minus} id="setWork">-</button>
+            <button onClick={this.add} id="setWork">+</button>
           </div>
           <div className="modify-break">
             Break: {Math.floor(this.state.setBreak/60)} minutes
-            <button onClick={this.minusBreak}>-</button>
-            <button onClick={this.addBreak}>+</button>
+            <button onClick={this.minus} id="setBreak">-</button>
+            <button onClick={this.add} id="setBreak">+</button>
           </div>
           <div className="set-time">
             <button onClick={this.reset}>Set</button>
