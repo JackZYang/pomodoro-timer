@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import Timer from './Timer';
+import ModifyTime from './ModifyTime';
 
 class App extends Component{
   constructor(props){
@@ -12,8 +13,7 @@ class App extends Component{
       currentWork: 1500,
       currentBreak: 300,
       remainingTime: 1500,
-      setWork: 1500,
-      setBreak: 300
+
     };
   }
   
@@ -34,15 +34,26 @@ class App extends Component{
     });
   }
 
-  reset = () => {
-    this.setState({
-      remainingTime: this.state.setWork,
-      working: false,
-      onBreak: false,
-      pause: true,
-      currentWork: this.state.setWork,
-      currentBreak: this.state.setBreak
-    });
+  reset = (setWork, setBreak) => {
+    if (setWork && setBreak) {
+      this.setState({
+        remainingTime: setWork,
+        working: false,
+        onBreak: false,
+        pause: true,
+        currentWork: setWork,
+        currentBreak: setBreak
+      });
+    } else {
+      this.setState({
+        remainingTime: 1500,
+        working: false,
+        onBreak: false,
+        pause: true,
+        currentWork: 1500,
+        currentBreak: 300
+      });
+    }
   }
   
   pause = () => {
@@ -76,39 +87,6 @@ class App extends Component{
     }
   }
 
-  minus = (e) => {
-    if (this.state.setWork > 60 && e.target.id === "setWork"){
-      this.setState({
-        [e.target.id]: this.state.setWork - 60
-      });
-    }
-    if (this.state.setBreak > 60 && e.target.id === "setBreak") {
-      this.setState({
-        [e.target.id]: this.state.setBreak - 60
-      });
-    }
-  }
-
-  add = (e) => {
-    if (e.target.id === "setWork") {
-      this.setState({
-        [e.target.id]: this.state.setWork + 60
-      });
-    }
-    if (e.target.id === "setBreak") {
-      this.setState({
-        [e.target.id]: this.state.setBreak + 60
-      });
-    }
-  }
-
-  default = () => {
-    this.setState({
-      setWork: 1500,
-      setBreak: 300
-    });
-  }
-
   render(){
     return (
       <div className="App">
@@ -116,7 +94,7 @@ class App extends Component{
         <div className="time-remaning">
             <Timer remainingTime={this.state.remainingTime} />
             <div className="timer-state">
-              {this.state.working ? "Working!" : this.state.onBreak ? "Break Time!" : "Paused"}
+              {this.state.working && !this.state.pause ? "Working!" : this.state.onBreak && !this.state.pause ? "Break Time!" : "Paused"}
             </div>
         </div>
         <div className="start-buttons">
@@ -124,22 +102,11 @@ class App extends Component{
           <button onClick={this.pause}>Pause</button>
           <button onClick={this.reset}>Reset</button>
         </div>
-        <div className="modify-time">
-          <div className="modify-work">
-            Work: {Math.floor(this.state.setWork/60)} minutes
-            <button onClick={this.minus} id="setWork">-</button>
-            <button onClick={this.add} id="setWork">+</button>
-          </div>
-          <div className="modify-break">
-            Break: {Math.floor(this.state.setBreak/60)} minutes
-            <button onClick={this.minus} id="setBreak">-</button>
-            <button onClick={this.add} id="setBreak">+</button>
-          </div>
-          <div className="set-time">
-            <button onClick={this.reset}>Set</button>
-            <button onClick={this.default}>Default</button>
-          </div>
-        </div>
+        <ModifyTime 
+          add={this.add}
+          minus={this.minus}
+          reset={this.reset} 
+        />
       </div>
     );
   }
